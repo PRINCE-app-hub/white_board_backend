@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
-const cors=require('cors'); 
+const cors = require('cors');
+
 app.use(cors());
-app.get('/prince', (req, res) => {
-  const sampleData={
-    message:"Hello world"
-  }
-  res.json(sampleData);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const userRoutes = require('./routes/userRoutes');
+app.use('/', userRoutes);
+
+app.get('/', (req, res) => {
+  res.json({ message: "Hello world" });
 });
 
 app.listen(5000, () => {
