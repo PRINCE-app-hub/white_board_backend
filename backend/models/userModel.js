@@ -1,4 +1,5 @@
 const mongoose=require ('mongoose'); 
+const hashedPassword=require('../utils/auth'); 
 const userSchema=new mongoose.Schema({
     name:{type:String,required:true},
     email:{
@@ -7,10 +8,11 @@ const userSchema=new mongoose.Schema({
     password:{type: String , required: true}
 }); 
 
-userSchema.pre('save',async(next)=>{
-    if(!this.isModified('password')) return next(); 
-    this.password=await bycrypt.hash(this.password,10); 
-    next();
+userSchema.pre('save',async function (next){
+    if(!this.isModified('password')) return next();
+    this.password=await hashedPassword(this.password);  
+   next(); 
+
 }); 
 
 
