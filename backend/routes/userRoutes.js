@@ -26,7 +26,7 @@ router.get('/test-email', async (req, res) => {
       to: 'yourtestemail@gmail.com',
       subject: 'Test Email',
       text: 'This is a test email from the whiteboard app!',
-      imageBase64: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...', // short dummy base64
+      imageBase64: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...',
     });
 
     res.status(200).json({ message: 'Test email sent!' });

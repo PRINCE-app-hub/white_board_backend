@@ -17,7 +17,7 @@ router.post('/send-email', verifyToken, async (req, res) => {
     });
 
     return res.status(200).json({ message: 'Email sent successfully' });
-  } catch (err) {
+  } catch (err) {   
     console.error(err);
     return res.status(500).json({ message: 'Failed to send email' });
   }
