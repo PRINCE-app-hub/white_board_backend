@@ -2,6 +2,7 @@
 const bcrypt = require('bcrypt');
 const {validationResult} =require('express-validator'); 
 const User = require('../models/userModel'); 
+const { hashPassword, generateToken, verifyToken } = require('../utils/auth');
 
 
 const signup= async (req,res)=>{
@@ -19,7 +20,7 @@ const signup= async (req,res)=>{
         res.status(201).json({message: 'User created successfully'}); 
     }
     catch(err){
-        console.log('Login error: ', error);
+        console.log('Login error: ', err);
         res.status(500).json({error:err.message}); 
         }
 
@@ -37,8 +38,9 @@ const login =async (req,res)=>{
                 'Invalid email or password'
             });
         }
+        const token=generateToken(user); 
         res.status(200).json({
-            message:'Login succesfully',
+            message:'Login succesfully',token,
             user: {
                   name: user.name,
                   email:user.email 
