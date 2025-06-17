@@ -1,5 +1,6 @@
+// this one is for user schema with password hashing 
 const mongoose=require ('mongoose'); 
-const hashedPassword=require('../utils/auth'); 
+const {hashPassword}=require('../utils/auth'); 
 const userSchema=new mongoose.Schema({
     name:{type:String,required:true},
     email:{
@@ -10,10 +11,11 @@ const userSchema=new mongoose.Schema({
 
 userSchema.pre('save',async function (next){
     if(!this.isModified('password')) return next();
-    this.password=await hashedPassword(this.password);  
+    this.password=await hashPassword(this.password);  
    next(); 
 
 }); 
 
 
 const User =mongoose.model('User',userSchema); 
+module.exports =User; 

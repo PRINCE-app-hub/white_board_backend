@@ -1,3 +1,5 @@
+// this one is for MongoDB connection 
+
 require('dotenv').config();
 const mongoose = require('mongoose');
 
