@@ -72,7 +72,7 @@ const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: false,
       secure: process.env.NODE_ENV === "production", 
-      sameSite: "Strict", 
+      sameSite: "Lax", 
       maxAge: 3600000,
     });
 
@@ -88,6 +88,21 @@ const login = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+const checkAuth = (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    res.status(200).json({ user: { name: decoded.name, email: decoded.email } });
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
 module.exports={signup,
-    login
+    login,checkAuth
+
 };

@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router=express.Router();
-const {signup,login}=require('../controller/userController');
+const {signup,login,checkAuth}=require('../controller/userController');
 const { body}=require('express-validator'); 
 const {verifyToken} =require('../utils/auth'); 
 router.post('/signup',
@@ -19,7 +19,7 @@ router.get('/protected',verifyToken,(req,res)=>{
      res.json({message: 'You are authorized!', user:req.user});
 });
 const { sendEmailWithAttachment } = require('../utils/mail');
-
+router.get('/check-auth', checkAuth);
 router.get('/test-email', async (req, res) => {
   try {
     await sendEmailWithAttachment({
@@ -35,7 +35,5 @@ router.get('/test-email', async (req, res) => {
     res.status(500).json({ message: 'Email failed', error: err.toString() });
   }
 });
-
-
 module.exports=router;
 
