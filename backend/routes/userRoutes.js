@@ -19,7 +19,7 @@ router.get('/protected',verifyToken,(req,res)=>{
      res.json({message: 'You are authorized!', user:req.user});
 });
 const { sendEmailWithAttachment } = require('../utils/mail');
-router.get('/check-auth', checkAuth);
+router.get('/check-auth', verifyToken, checkAuth);
 router.get('/test-email', async (req, res) => {
   try {
     await sendEmailWithAttachment({

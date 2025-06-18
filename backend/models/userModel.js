@@ -1,21 +1,28 @@
-// this one is for user schema with password hashing 
-const mongoose=require ('mongoose'); 
-const {hashPassword}=require('../utils/auth'); 
-const userSchema=new mongoose.Schema({
-    name:{type:String,required:true},
-    email:{
-        type:String , required:true,unique:true
-    },
-    password:{type: String , required: true}
-}); 
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-userSchema.pre('save',async function (next){
-    if(!this.isModified('password')) return next();
-    this.password=await hashPassword(this.password);  
-   next(); 
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
 
-}); 
+// Hash the password before saving
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next(); // only hash if modified or new
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
-
-const User =mongoose.model('User',userSchema); 
-module.exports =User; 
+const User = mongoose.model('User', userSchema);
+module.exports = User;

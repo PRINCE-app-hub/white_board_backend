@@ -16,6 +16,10 @@ const generateToken = (user) => {
   });
 };
 
+const verifyTokenDirect = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
@@ -35,4 +39,5 @@ module.exports = {
   hashPassword,
   generateToken,
   verifyToken,
+  verifyTokenDirect 
 };
