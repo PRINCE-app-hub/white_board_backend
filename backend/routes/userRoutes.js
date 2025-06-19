@@ -5,6 +5,7 @@ const router=express.Router();
 const {signup,login,checkAuth}=require('../controller/userController');
 const { body}=require('express-validator'); 
 const {verifyToken} =require('../utils/auth'); 
+const Canvas=require('../models/canvasModel')
 router.post('/signup',
     [body('name').notEmpty().withMessage('Name is required'),
         body('email').isEmail().withMessage('Valid email is required'),
@@ -33,6 +34,35 @@ router.get('/test-email', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Email failed', error: err.toString() });
+  }
+});
+router.post("/canvas",verifyToken,async(req,res)=>{
+  const {element,shared=[]}=req.body; 
+  const canvas=new Canvas({
+    owner:req.user._id,
+    shared,
+    element,
+  
+  }); 
+  await canvas.save(); 
+  res.status(201).json({message:"Canvas saved",canvas});
+});
+router.get("/canvas",verifyToken,async(req,res)=>{
+  const userId=req.user._id;
+   try {
+    const canvases = await Canvas.find({
+      $or: [
+        { owner: userId },
+        { shared: userId }
+      ]
+    })
+    .sort({ createdAt: -1 })
+    .select("_id createdAt elements");
+
+    res.status(200).json(canvases);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch canvases" });
   }
 });
 module.exports=router;
