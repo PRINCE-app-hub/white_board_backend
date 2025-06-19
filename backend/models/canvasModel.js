@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 
 const canvasSchema = new mongoose.Schema(
   {
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     shared: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     elements: { type: Array, default: [] },
   },

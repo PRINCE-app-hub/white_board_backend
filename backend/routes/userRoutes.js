@@ -1,5 +1,5 @@
-// this is just for api 
-
+// this is just for api
+const mongoose=require('mongoose');
 const express = require('express');
 const router=express.Router();
 const {signup,login,checkAuth}=require('../controller/userController');
@@ -37,18 +37,18 @@ router.get('/test-email', async (req, res) => {
   }
 });
 router.post("/canvas",verifyToken,async(req,res)=>{
-  const {element,shared=[]}=req.body; 
+  const {elements,shared=[]}=req.body; 
   const canvas=new Canvas({
-    owner:req.user._id,
+    owner:req.user.id,
     shared,
-    element,
+    elements,
   
   }); 
   await canvas.save(); 
   res.status(201).json({message:"Canvas saved",canvas});
 });
 router.get("/canvas",verifyToken,async(req,res)=>{
-  const userId=req.user._id;
+  const userId=req.user.id;
    try {
     const canvases = await Canvas.find({
       $or: [
