@@ -5,6 +5,7 @@ const canvasSchema = new mongoose.Schema(
     owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     shared: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     elements: { type: Array, default: [] },
+    thumbnail: { type: String },
   },
   {
     timestamps: true, 
